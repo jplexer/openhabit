@@ -1,0 +1,58 @@
+{
+  "build": {
+    "ESP32_SUBCLASS": "esp32s3",
+    "USE_USB": "2",
+    "SDKCONFIGPATH": "./sdkconfig"
+  },
+  "include": [
+    "$(MODDABLE)/modules/io/manifest.json",
+    "$(MODDABLE)/modules/io/audioout/manifest.json",
+    "$(MODDABLE)/modules/pins/digital/manifest.json",
+    "$(MODDABLE)/modules/drivers/peripherals/ds3231/manifest.json"
+  ],
+  "modules": {
+    "gdey037t03": "./drivers/gdey037t03/gdey037t03",
+    "commodetto/Dither": "$(MODDABLE)/modules/commodetto/commodettoDither"
+  },
+  "preload": ["gdey037t03", "commodetto/Dither"],
+  "creation": {
+    "static": 0,
+    "chunk": {
+      "initial": 78848,
+      "incremental": 0
+    },
+    "heap": {
+      "initial": 4928,
+      "incremental": 0
+    },
+    "stack": 512
+  },
+  "config": {
+    "format": "Gray256",
+    "screen": "gdey037t03"
+  },
+  "defines": {
+    "i2c": {
+      "sda_pin": 45,
+      "scl_pin": 46
+    },
+    "spi": {
+      "mosi_pin": 11,
+      "sck_pin": 12
+    },
+    "audioOut": {
+      "bitsPerSample": 16,
+      "numChannels": 1,
+      "sampleRate": 44100,
+      "i2s": {
+        "num": 0,
+        "slot": "I2S_STD_SLOT_LEFT",
+        "bitsPerSample": 16,
+        "bck_pin": 40,
+        "lr_pin": 39,
+        "mck_pin": 0,
+        "dataout_pin": 38
+      }
+    }
+  }
+}
