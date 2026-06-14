@@ -20,6 +20,7 @@
 		"core/Backlight": "./core/Backlight",
 		"core/Light": "./core/Light",
 		"core/Player": "./core/Player",
+		"core/Alarms": "./core/Alarms",
 		"core/list": "./core/list",
 		"core/tz": "./core/tz",
 		"core/zones": "./core/zones",
@@ -37,7 +38,13 @@
 		"apps/LightingApp": "./apps/LightingApp",
 		"apps/VolumeApp": "./apps/VolumeApp",
 		"apps/FilesApp": "./apps/FilesApp",
-		"apps/PlayerApp": "./apps/PlayerApp"
+		"apps/PlayerApp": "./apps/PlayerApp",
+		"apps/AlarmsApp": "./apps/AlarmsApp",
+		"apps/AlarmEditApp": "./apps/AlarmEditApp",
+		"apps/AlarmTimeApp": "./apps/AlarmTimeApp",
+		"apps/AlarmDaysApp": "./apps/AlarmDaysApp",
+		"apps/SoundPickApp": "./apps/SoundPickApp",
+		"apps/AlarmRingApp": "./apps/AlarmRingApp"
 	},
 	"preload": [
 		"core/App",
@@ -48,6 +55,7 @@
 		"core/Backlight",
 		"core/Light",
 		"core/Player",
+		"core/Alarms",
 		"core/list",
 		"core/tz",
 		"core/zones",
@@ -65,7 +73,13 @@
 		"apps/LightingApp",
 		"apps/VolumeApp",
 		"apps/FilesApp",
-		"apps/PlayerApp"
+		"apps/PlayerApp",
+		"apps/AlarmsApp",
+		"apps/AlarmEditApp",
+		"apps/AlarmTimeApp",
+		"apps/AlarmDaysApp",
+		"apps/SoundPickApp",
+		"apps/AlarmRingApp"
 	],
 	"resources": {
 		"*-mask": [

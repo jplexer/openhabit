@@ -101,9 +101,13 @@ class Manager {
 
   loop() {
     const now = Date.now();
-    const top = this.top;
-    if (!top) return;
+    if (!this.top) return;
 
+    // alarms run before anything else — a fired alarm pushes its ring screen, which
+    // then becomes the top app for the rest of this loop
+    this.ctx.alarms?.tick(now, this.ctx);
+
+    const top = this.top;
     const events = this.input.poll(now);
 
     // backlight: any interaction fades it up; it fades out when idle. Done before any

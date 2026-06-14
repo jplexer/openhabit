@@ -100,6 +100,14 @@ export default class Light {
     this.want ? this.off() : this.on();
   }
 
+  // drive to an arbitrary brightness immediately (no fade, doesn't change the stored
+  // brightness or on/off intent) — used by the alarm sunrise ramp
+  dim(pct) {
+    this.stopFadeOut();
+    this.level = pct <= 0 ? 0 : this.levelFor(pct);
+    this.pwm.write(this.level);
+  }
+
   // settings preview (manual flavour): turn on to preview, restore prior state on exit
   previewBegin() {
     this.prevWant = this.want;
