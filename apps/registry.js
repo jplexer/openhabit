@@ -1,9 +1,10 @@
 import AboutApp from "apps/AboutApp";
+import MenuApp from "apps/MenuApp";
+import settings from "apps/settings";
 
 const registry = [
+  { label: "Settings", make: () => new MenuApp(settings, "settings") },
   { label: "About", make: () => new AboutApp() },
-  // { label: "Timer",   make: () => new TimerApp() },
-  // { label: "Settings", make: () => new SettingsApp() },
 ];
 
 export default registry;

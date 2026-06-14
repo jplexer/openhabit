@@ -1,7 +1,12 @@
 {
 	"include": [
 		"$(MODDABLE)/examples/manifest_base.json",
-		"$(MODDABLE)/examples/manifest_commodetto.json"
+		"$(MODDABLE)/examples/manifest_commodetto.json",
+		"$(MODULES)/network/wifi/manifest.json",
+		"$(MODULES)/network/net/manifest.json",
+		"$(MODULES)/network/socket/manifest.json",
+		"$(MODULES)/network/sntp/manifest.json",
+		"$(MODULES)/files/preference/manifest.json"
 	],
 	"modules": {
 		"main": "./main",
@@ -9,20 +14,42 @@
 		"core/assets": "./core/assets",
 		"core/Input": "./core/Input",
 		"core/Manager": "./core/Manager",
+		"core/Net": "./core/Net",
+		"core/list": "./core/list",
+		"core/tz": "./core/tz",
+		"core/zones": "./core/zones",
 		"apps/registry": "./apps/registry",
+		"apps/settings": "./apps/settings",
 		"apps/ClockApp": "./apps/ClockApp",
 		"apps/MenuApp": "./apps/MenuApp",
-		"apps/AboutApp": "./apps/AboutApp"
+		"apps/AboutApp": "./apps/AboutApp",
+		"apps/WiFiApp": "./apps/WiFiApp",
+		"apps/KeyboardApp": "./apps/KeyboardApp",
+		"apps/DateTimeApp": "./apps/DateTimeApp",
+		"apps/SetTimeApp": "./apps/SetTimeApp",
+		"apps/TZApp": "./apps/TZApp",
+		"apps/ZonePickApp": "./apps/ZonePickApp"
 	},
 	"preload": [
 		"core/App",
 		"core/assets",
 		"core/Input",
 		"core/Manager",
+		"core/Net",
+		"core/list",
+		"core/tz",
+		"core/zones",
 		"apps/registry",
+		"apps/settings",
 		"apps/ClockApp",
 		"apps/MenuApp",
-		"apps/AboutApp"
+		"apps/AboutApp",
+		"apps/WiFiApp",
+		"apps/KeyboardApp",
+		"apps/DateTimeApp",
+		"apps/SetTimeApp",
+		"apps/TZApp",
+		"apps/ZonePickApp"
 	],
 	"resources": {
 		"*-mask": [

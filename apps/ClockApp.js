@@ -24,28 +24,41 @@ const pad = (n) => (n < 10 ? "0" : "") + n;
 
 class ClockApp extends App {
   onMount(ctx) {
+    // cached once so compute() doesn't hit Preference every tick
+    this.hasNetworks = !!(ctx.net && ctx.net.savedNetworks().length);
     this.compute(ctx);
-    this.lastKey = this.timeText + this.dateText;
+    this.lastKey = this.key();
+  }
+
+  key() {
+    return this.timeText + this.dateText + this.statusText;
   }
 
   compute(ctx) {
-    const t = ctx.rtc.time; // ms, or undefined if the clock is unset
+    const net = ctx.net;
+    const t = ctx.rtc.time; // true-UTC ms, or undefined if the clock is unset
     if (undefined === t) {
       this.timeText = "--:--";
-      this.dateText = "set the clock";
+      this.dateText = this.hasNetworks ? "set the clock" : "press dial to set up";
       this.minute = -1;
-      return;
+    } else {
+      // RTC holds UTC; shift by the zone's DST-aware offset for local display
+      const offset = (net ? net.offsetMinutes(t) : 0) * 60000;
+      const d = new Date(t + offset);
+      this.minute = d.getUTCMinutes();
+      this.timeText = `${pad(d.getUTCHours())}:${pad(this.minute)}`;
+      this.dateText = `${DAYS[d.getUTCDay()]}  ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
     }
-    const d = new Date(t);
-    this.minute = d.getUTCMinutes();
-    this.timeText = `${pad(d.getUTCHours())}:${pad(this.minute)}`;
-    this.dateText = `${DAYS[d.getUTCDay()]}  ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+    // durable indicator only — ignore transient connecting/scanning so the home
+    // screen doesn't repaint (a ~0.5s partial) on every intermediate transition
+    this.statusText =
+      net && "online" === net.status ? (net.synced ? "" : "wifi") : "offline";
   }
 
   onTick(now, ctx) {
     this.compute(ctx);
-    const key = this.timeText + this.dateText;
-    if (key === this.lastKey) return false; // minute hasn't changed
+    const key = this.key();
+    if (key === this.lastKey) return false; // nothing visible changed
     this.lastKey = key;
     return true;
   }
@@ -66,6 +79,9 @@ class ClockApp extends App {
     const W = poco.width,
       H = poco.height;
     poco.fillRectangle(white, 0, 0, W, H);
+    // subtle network indicator, top-left (empty when online + synced)
+    if (this.statusText)
+      poco.drawText(this.statusText, small, black, 8, 6);
     // large time, centered in the space above the date
     poco.drawText(
       this.timeText,
