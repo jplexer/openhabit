@@ -2,9 +2,10 @@
  * drawList — a reusable windowed (scrolling) vertical list for Poco screens.
  *
  * It keeps the selected row visible, draws only the rows that fit between `top` and
- * `bottom`, paints the selection highlight, and shows a scrollbar thumb when the list
- * is taller than the window. Row CONTENT is delegated to a `drawRow` callback so each
- * caller can lay out its own text (a plain label, or left+right columns, etc.).
+ * `bottom`, paints the selection highlight, and — when the list overflows — shows a
+ * scrollbar thumb plus up/down arrows indicating there are more items above/below. Row
+ * CONTENT is delegated to a `drawRow` callback so each caller can lay out its own text
+ * (a plain label, or left+right columns, etc.).
  *
  *   drawRow(i, x, ty, selected, rowW)
  *     i        item index
@@ -17,8 +18,20 @@
  * stored last time and save the returned value. Pass 0 (or undefined) on first draw.
  */
 
-const SB_W = 6; // scrollbar width
-const SB_GAP = 4; // gap between rows and scrollbar
+const EDGE = 24; // scrollbar/arrow centre, this far left of the region's right edge —
+//                  kept large so the panel bezel doesn't hide it
+const SB_W = 7; // scrollbar thumb width
+const AR_H = 9; // arrow height
+const AR_HALF = 6; // arrow half-base (width = 13)
+
+// filled triangle (up = apex at top), 2px-tall bands so it reads on the e-ink
+function arrow(poco, color, cx, topY, up) {
+  for (let r = 0; r < AR_H; r++) {
+    const t = up ? r / (AR_H - 1) : 1 - r / (AR_H - 1);
+    const hw = Math.round(AR_HALF * t);
+    poco.fillRectangle(color, cx - hw, topY + r, hw * 2 + 1, 2);
+  }
+}
 
 export default function drawList(poco, o) {
   const f = o.font;
@@ -38,7 +51,7 @@ export default function drawList(poco, o) {
   first = Math.max(0, Math.min(first, maxFirst));
 
   const overflow = count > rows;
-  const rowW = width - (overflow ? SB_W + SB_GAP : 0);
+  const rowW = width - (overflow ? EDGE + AR_HALF + 6 : 0);
   const ty = (rh - f.height) >> 1; // vertical centering offset within a row
   const last = Math.min(count, first + rows);
   for (let i = first; i < last; i++) {
@@ -49,11 +62,23 @@ export default function drawList(poco, o) {
   }
 
   if (overflow) {
-    const trackH = rows * rh;
-    const sbx = x + width - SB_W;
-    const thumbH = Math.max(10, ((rows / count) * trackH) | 0);
-    const thumbY = top + (((first / maxFirst) * (trackH - thumbH)) | 0);
-    poco.fillRectangle(o.black, sbx, thumbY, SB_W, thumbH);
+    const bottom = o.bottom;
+    const cx = x + width - EDGE; // inset from the right edge to clear the bezel
+    const sbx = cx - (SB_W >> 1);
+
+    // up/down arrows pinned to the top/bottom of the list region (only the direction
+    // that has more items)
+    if (first > 0) arrow(poco, o.black, cx, top, true);
+    if (first + rows < count) arrow(poco, o.black, cx, bottom - AR_H, false);
+
+    // thumb between the arrow zones
+    const trackTop = top + AR_H + 3;
+    const tH = bottom - AR_H - 3 - trackTop;
+    if (tH > 6) {
+      const thumbH = Math.max(8, ((rows / count) * tH) | 0);
+      const thumbY = trackTop + (((first / maxFirst) * (tH - thumbH)) | 0);
+      poco.fillRectangle(o.black, sbx, thumbY, SB_W, thumbH);
+    }
   }
 
   return first;
