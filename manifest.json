@@ -4,11 +4,35 @@
 		"$(MODDABLE)/examples/manifest_commodetto.json"
 	],
 	"modules": {
-		"*": [
-			"./main"
-		]
+		"main": "./main",
+		"core/App": "./core/App",
+		"core/assets": "./core/assets",
+		"core/Input": "./core/Input",
+		"core/Manager": "./core/Manager",
+		"apps/registry": "./apps/registry",
+		"apps/ClockApp": "./apps/ClockApp",
+		"apps/MenuApp": "./apps/MenuApp",
+		"apps/AboutApp": "./apps/AboutApp"
 	},
+	"preload": [
+		"core/App",
+		"core/assets",
+		"core/Input",
+		"core/Manager",
+		"apps/registry",
+		"apps/ClockApp",
+		"apps/MenuApp",
+		"apps/AboutApp"
+	],
 	"resources": {
-		"*-mask": "$(MODDABLE)/examples/assets/fonts/OpenSans-Regular-18"
+		"*-mask": [
+			"$(MODDABLE)/examples/assets/fonts/OpenSans-Regular-18",
+			{
+				"source": "$(MODDABLE)/examples/assets/scalablefonts/OpenSans/OpenSans-Semibold",
+				"size": 120,
+				"characters": "0123456789:- ",
+				"monochrome": true
+			}
+		]
 	}
 }
