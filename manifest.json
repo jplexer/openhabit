@@ -36,6 +36,7 @@
 		"apps/ZonePickApp": "./apps/ZonePickApp",
 		"apps/LightingApp": "./apps/LightingApp",
 		"apps/VolumeApp": "./apps/VolumeApp",
+		"apps/FilesApp": "./apps/FilesApp",
 		"apps/PlayerApp": "./apps/PlayerApp"
 	},
 	"preload": [
@@ -63,6 +64,7 @@
 		"apps/ZonePickApp",
 		"apps/LightingApp",
 		"apps/VolumeApp",
+		"apps/FilesApp",
 		"apps/PlayerApp"
 	],
 	"resources": {
