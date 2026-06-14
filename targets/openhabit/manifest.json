@@ -2,7 +2,8 @@
   "build": {
     "ESP32_SUBCLASS": "esp32s3",
     "USE_USB": "2",
-    "SDKCONFIGPATH": "./sdkconfig"
+    "SDKCONFIGPATH": "./sdkconfig",
+    "C_FLAGS": "$(C_COMMON_FLAGS) -Wno-implicit-function-declaration -std=gnu17 $(C_FLAGS_SUBPLATFORM) -I$(IDF_PATH)/components/esp_driver_sdmmc/legacy/include -I$(IDF_PATH)/components/sdmmc/include -I$(IDF_PATH)/components/esp_hal_sd/include -I$(IDF_PATH)/components/esp_driver_sdspi/include"
   },
   "include": [
     "$(MODDABLE)/modules/io/manifest.json",
@@ -12,9 +13,20 @@
   ],
   "modules": {
     "gdey037t03": "./drivers/gdey037t03/gdey037t03",
-    "commodetto/Dither": "$(MODDABLE)/modules/commodetto/commodettoDither"
+    "commodetto/Dither": "$(MODDABLE)/modules/commodetto/commodettoDither",
+    "file": "./drivers/sdcard/file"
   },
-  "preload": ["gdey037t03", "commodetto/Dither"],
+  "preload": ["gdey037t03", "commodetto/Dither", "file"],
+  "platforms": {
+    "esp32": {
+      "dependency": [
+        { "idf": "esp_driver_sdmmc" },
+        { "idf": "sdmmc" },
+        { "idf": "fatfs" },
+        { "idf": "vfs" }
+      ]
+    }
+  },
   "creation": {
     "static": 0,
     "chunk": {
@@ -29,9 +41,27 @@
   },
   "config": {
     "format": "Gray256",
-    "screen": "gdey037t03"
+    "screen": "gdey037t03",
+    "file": {
+      "root": "/sdcard/"
+    }
   },
   "defines": {
+    "file": {
+      "sdcard": 1,
+      "root": "#/sdcard",
+      "maxopen": 8
+    },
+    "sdcard": {
+      "clk": 6,
+      "cmd": 5,
+      "d0": 7,
+      "d1": 8,
+      "d2": 14,
+      "d3": 13,
+      "width": 4,
+      "internalPullup": 1
+    },
     "i2c": {
       "sda_pin": 45,
       "scl_pin": 46
