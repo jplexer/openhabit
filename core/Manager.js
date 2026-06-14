@@ -132,8 +132,11 @@ class Manager {
     if (dirty) return this.render();
 
     // idle: clear ghosting once the image has settled and enough has built up
+    // (apps can opt out, e.g. during audio playback where a refresh would block and
+    // starve the audio queue)
     if (
       DEGHOST_AFTER > 0 &&
+      !top.suppressDeghost &&
       this.partials >= DEGHOST_AFTER &&
       now - this.lastUpdate >= SETTLE_MS
     )

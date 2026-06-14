@@ -74,6 +74,7 @@
       "bitsPerSample": 16,
       "numChannels": 1,
       "sampleRate": 44100,
+      "amplifier_power": 41,
       "i2s": {
         "num": 0,
         "slot": "I2S_STD_SLOT_LEFT",
