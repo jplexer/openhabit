@@ -20,6 +20,8 @@
 
 const EDGE = 24; // scrollbar/arrow centre, this far left of the region's right edge —
 //                  kept large so the panel bezel doesn't hide it
+const PAD = 16; // right reserve kept even without a scrollbar, so right-aligned row
+//                 content (sizes, signal) also clears the bezel
 const SB_W = 7; // scrollbar thumb width
 const AR_H = 9; // arrow height
 const AR_HALF = 6; // arrow half-base (width = 13)
@@ -51,7 +53,7 @@ export default function drawList(poco, o) {
   first = Math.max(0, Math.min(first, maxFirst));
 
   const overflow = count > rows;
-  const rowW = width - (overflow ? EDGE + AR_HALF + 6 : 0);
+  const rowW = width - (overflow ? EDGE + AR_HALF + 6 : PAD);
   const ty = (rh - f.height) >> 1; // vertical centering offset within a row
   const last = Math.min(count, first + rows);
   for (let i = first; i < last; i++) {

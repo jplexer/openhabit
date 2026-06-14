@@ -150,11 +150,13 @@ class KeyboardApp extends App {
     poco.fillRectangle(black, 0, 0, W, 34);
     poco.drawText(this.title, f, white, 16, (34 - f.height) >> 1);
 
-    // entry field with a 1px box outline (Poco has no rectangle-outline call)
+    // entry field with a 1px box outline (Poco has no rectangle-outline call).
+    // RIGHT keeps the right edge clear of the panel bezel.
+    const RIGHT = 24;
     const shown = this.display() || " ";
     const bx = 14,
       by = 40,
-      bw = W - 28,
+      bw = W - bx - RIGHT,
       bh = f.height + 6;
     poco.fillRectangle(black, bx, by, bw, 1);
     poco.fillRectangle(black, bx, by + bh - 1, bw, 1);
@@ -162,9 +164,9 @@ class KeyboardApp extends App {
     poco.fillRectangle(black, bx + bw - 1, by, 1, bh);
     poco.drawText(shown, f, black, 16, 42);
 
-    // character grid
+    // character grid (right edge kept clear of the bezel)
     const margin = 8;
-    const cw = ((W - 2 * margin) / COLS) | 0;
+    const cw = ((W - margin - RIGHT) / COLS) | 0;
     const ch = f.height + 2;
     const gx = margin,
       gy = 78;
