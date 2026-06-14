@@ -11,7 +11,8 @@ import LightingApp from "apps/LightingApp";
 const settings = [
   { label: "Wi-Fi", make: () => new WiFiApp() },
   { label: "Date & Time", make: () => new DateTimeApp() },
-  { label: "Lighting", make: () => new LightingApp() },
+  { label: "Front light", make: () => new LightingApp("backlight", "front light") },
+  { label: "Big light", make: () => new LightingApp("bigLight", "big light") },
 ];
 
 export default settings;

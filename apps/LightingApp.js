@@ -1,7 +1,11 @@
 /*
- * LightingApp — pick the backlight brightness (5/25/50/75/100 %). The light previews
- * live as you rotate; dial/big saves, orange cancels (and restores the prior level).
- * The light is held on while this screen is open so you can see the preview.
+ * LightingApp — pick a light's brightness (5/25/50/75/100 %), with live preview: the
+ * light shows each level as you rotate; dial/big saves, orange cancels (restoring the
+ * prior level and on/off state). Generic over which light via a ctx key + title, so
+ * the front backlight and the big light get separate, identical settings screens.
+ *
+ *   new LightingApp("backlight", "front light")
+ *   new LightingApp("bigLight",  "big light")
  */
 
 import App from "core/App";
@@ -11,38 +15,36 @@ const FONT = "OpenSans-Regular-18";
 const LEVELS = [5, 25, 50, 75, 100];
 
 class LightingApp extends App {
+  constructor(which = "backlight", title = "lighting") {
+    super();
+    this.which = which;
+    this.title = title;
+  }
+
   onMount(ctx) {
-    this.bl = ctx.backlight;
-    this.origPct = this.bl ? this.bl.pct : 100;
+    this.l = ctx[this.which];
+    this.origPct = this.l ? this.l.pct : 100;
     const i = LEVELS.indexOf(this.origPct);
     this.sel = i >= 0 ? i : LEVELS.length - 1;
-    if (this.bl) {
-      this.bl.setHold(true); // keep the light on for the preview
-      this.bl.setBrightness(LEVELS[this.sel], false); // show current level
+    if (this.l) {
+      this.l.previewBegin();
+      this.l.previewSet(LEVELS[this.sel]);
     }
-  }
-
-  onUnmount() {
-    if (this.bl) this.bl.setHold(false);
-  }
-
-  preview() {
-    if (this.bl) this.bl.setBrightness(LEVELS[this.sel], false); // live, not saved
   }
 
   onEvent(event, ctx) {
     if ("rotate" === event.type) {
       this.sel = Math.max(0, Math.min(LEVELS.length - 1, this.sel + event.delta));
-      this.preview();
+      if (this.l) this.l.previewSet(LEVELS[this.sel]);
       return true;
     }
     if ("press" === event.type && ("dial" === event.button || "big" === event.button)) {
-      if (this.bl) this.bl.setBrightness(LEVELS[this.sel], true); // save
+      if (this.l) this.l.previewSave(LEVELS[this.sel]);
       ctx.nav.pop();
       return false;
     }
     if ("press" === event.type && "orange" === event.button) {
-      if (this.bl) this.bl.setBrightness(this.origPct, false); // restore preview
+      if (this.l) this.l.previewCancel(this.origPct);
       ctx.nav.pop();
       return false;
     }
@@ -58,7 +60,7 @@ class LightingApp extends App {
     const pct = LEVELS[this.sel];
     poco.fillRectangle(white, 0, 0, W, H);
     poco.fillRectangle(black, 0, 0, W, 34);
-    poco.drawText("lighting", f, white, 16, (34 - f.height) >> 1);
+    poco.drawText(this.title, f, white, 16, (34 - f.height) >> 1);
 
     const label = pct + "%";
     poco.drawText(label, f, black, (W - poco.getTextWidth(label, f)) >> 1, 60);

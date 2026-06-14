@@ -68,6 +68,11 @@ class ClockApp extends App {
       ctx.nav.push(new MenuApp(registry));
       return false; // MenuApp renders itself on push
     }
+    // orange toggles the big light — only from the home screen
+    if ("press" === event.type && "orange" === event.button) {
+      ctx.bigLight?.toggle();
+      return false;
+    }
     return false;
   }
 
