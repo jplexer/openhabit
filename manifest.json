@@ -6,7 +6,8 @@
 		"$(MODULES)/network/net/manifest.json",
 		"$(MODULES)/network/socket/manifest.json",
 		"$(MODULES)/network/sntp/manifest.json",
-		"$(MODULES)/files/preference/manifest.json"
+		"$(MODULES)/files/preference/manifest.json",
+		"$(MODULES)/pins/pwm/manifest.json"
 	],
 	"modules": {
 		"main": "./main",
@@ -15,6 +16,7 @@
 		"core/Input": "./core/Input",
 		"core/Manager": "./core/Manager",
 		"core/Net": "./core/Net",
+		"core/Backlight": "./core/Backlight",
 		"core/list": "./core/list",
 		"core/tz": "./core/tz",
 		"core/zones": "./core/zones",
@@ -28,7 +30,8 @@
 		"apps/DateTimeApp": "./apps/DateTimeApp",
 		"apps/SetTimeApp": "./apps/SetTimeApp",
 		"apps/TZApp": "./apps/TZApp",
-		"apps/ZonePickApp": "./apps/ZonePickApp"
+		"apps/ZonePickApp": "./apps/ZonePickApp",
+		"apps/LightingApp": "./apps/LightingApp"
 	},
 	"preload": [
 		"core/App",
@@ -36,6 +39,7 @@
 		"core/Input",
 		"core/Manager",
 		"core/Net",
+		"core/Backlight",
 		"core/list",
 		"core/tz",
 		"core/zones",
@@ -49,7 +53,8 @@
 		"apps/DateTimeApp",
 		"apps/SetTimeApp",
 		"apps/TZApp",
-		"apps/ZonePickApp"
+		"apps/ZonePickApp",
+		"apps/LightingApp"
 	],
 	"resources": {
 		"*-mask": [

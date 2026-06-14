@@ -106,6 +106,14 @@ class Manager {
 
     const events = this.input.poll(now);
 
+    // backlight: any interaction fades it up; it fades out when idle. Done before any
+    // early return so every event counts (incl. the big snooze button press).
+    const backlight = this.ctx.backlight;
+    if (backlight) {
+      if (events.length) backlight.wake(now);
+      backlight.tick(now);
+    }
+
     // system gestures are handled here, before any app sees the input
     for (const event of events) {
       if ("reboot" === event.type) return this.reboot();

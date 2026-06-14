@@ -6,10 +6,12 @@
 
 import WiFiApp from "apps/WiFiApp";
 import DateTimeApp from "apps/DateTimeApp";
+import LightingApp from "apps/LightingApp";
 
 const settings = [
   { label: "Wi-Fi", make: () => new WiFiApp() },
   { label: "Date & Time", make: () => new DateTimeApp() },
+  { label: "Lighting", make: () => new LightingApp() },
 ];
 
 export default settings;
